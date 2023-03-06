@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+  <title>Comments Example</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <wrapper>
+    <container>
+      <form id="myForm" 
+      method="post" onsubmit="AddComment();return false">
+        <span>Имя:</span>
+        <input type="text" id="userName" value = "" placeholder="Ваше имя" name="userName" required autocomplete="off">
+        <span>Комментарий:</span>
+        <input type="text" id="userComment" placeholder="Ваш комментарий" required autocomplete="off">
+        <span>Дата:</span>
+        <input type="date" id="commentDate" autocomplete="off" max="2999-12-31">
+        <button id="post" type="submit" onsubmit="MyFunction()">ОТПРАВИТЬ</button>
+      </form>
+      <div id="comments">
+      </div>
+    </container>
+  </wrapper>
+  <script src="/js/script.js" ></script>
+</body>
+</html>
