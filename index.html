@@ -11,20 +11,25 @@
 <body>
   <wrapper>
     <container>
-      <form id="myForm" 
-      method="post" onsubmit="AddComment();return false">
+      <form id="myForm" method='POST' onsubmit="AddComment()">
         <span>Имя:</span>
         <input type="text" id="userName" value = "" placeholder="Ваше имя" name="userName" required autocomplete="off">
         <span>Комментарий:</span>
-        <input type="text" id="userComment" placeholder="Ваш комментарий" required autocomplete="off">
-        <span>Дата:</span>
-        <input type="date" id="commentDate" autocomplete="off" max="2999-12-31">
-        <button id="post" type="submit" onsubmit="MyFunction()">ОТПРАВИТЬ</button>
+        <textarea id =userComment placeholder="Ваш комментарий" value="" required autocomplete="off"></textarea>
+        <div id="dateAndButton">
+          <div id="spanAndDate">
+            <span id="spanDate">Дата:</span>
+            <input type="date" placeholder="dd-mm-yyyy" value="" min="01-01-1917" max="31-12-2030"
+            id="commentDate" autocomplete="off">
+          </div>
+          <div id="ButtonDiv">
+            <button type="submit">ОТПРАВИТЬ</button>
+          </div>
+        </div>
       </form>
-      <div id="comments">
-      </div>
+      <div id="comments" class="comments"></div>
     </container>
   </wrapper>
-  <script src="/js/script.js" ></script>
+  <script src="/js/script1.js" ></script>
 </body>
 </html>
