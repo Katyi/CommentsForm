@@ -1,24 +1,83 @@
-let currentId = 0;
+let usersinfo = [];
 
-function likeComment(e) {
-  // console.log(e.target.id);
-  // console.log(document.getElementById(e.target.id).src.slice(-8));
-  if (document.getElementById(e.target.id).src.slice(-8) === "like.png") {
-    document.getElementById(e.target.id).src = "../img/likeRed.png";
-  } else {
-    document.getElementById(e.target.id).src = "../img/like.png";
-  }
+async function getComments() {
+  const responce = await fetch('http://localhost:5000/comments');
+  const comments = await responce.json();
+  console.log(comments);
+  return comments;
 }
 
-function deleteComment(e) {
-  document.getElementById(e.target.id).parentElement.parentElement.remove();
+async function postComments (bodyForFetch) {
+  let responce = await fetch('http://localhost:5000/comments', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body : JSON.stringify(bodyForFetch)
+  });
+  return responce;
 }
 
-function AddComment() {
+
+getComments()
+.then(comments => {
+  console.log(comments)
+  comments.forEach(item => {
+    let div = document.createElement('div');
+    let currentId = 'comment' + item.id;
+    div.id = currentId;
+    div.className = "comment";
+    document.getElementById("comments").append(div);
+    
+    let userName = item.name;
+    div = document.createElement("div");
+    div.id = "userNameInComments";
+    let text = document.createTextNode(userName);
+    div.append(text);
+    document.getElementById(currentId).append(div);
+
+    let userComment = item.comment;
+    div = document.createElement("div");
+    div.id = "userCommentInComments";
+    text = document.createTextNode(userComment);
+    div.append(text);
+    document.getElementById(currentId).append(div);
+
+    div = document.createElement("div");
+    let commentBottom = 'commentBottom' + item.id;
+    console.log(commentBottom);
+    div.id = commentBottom;
+    div.className = 'commentBottom';
+    document.getElementById(currentId).append(div);
+
+    let commentDateTime = `${item.date}, ${item.time}`;
+    div = document.createElement("div");
+    div.id = 'commentDateTimeinComments';
+    text = document.createTextNode(commentDateTime);
+    div.append(text);
+    document.getElementById(commentBottom).append(div);
+
+    let img = document.createElement("img");
+    img.id = "likeButton" + item.id;
+    img.className = "likeButton";
+    img.src = "../img/like.png";
+    img.addEventListener('click', likeComment);
+    document.getElementById(commentBottom).append(img);
+
+    img = document.createElement("img");
+    img.id = "commentButton" + item.id;
+    img.className = "commentButton";
+    img.src = "../img/delete1.png";
+    img.addEventListener('click', deleteComment);
+    document.getElementById(commentBottom).append(img);
+  });
+});
+
+async function AddComment() {
+  let elemCount  = document.getElementsByClassName("comments").childElementCount;
   let userName = document.getElementById("userName").value;
   let userComment = document.getElementById("userComment").value;
   let commentDate = document.getElementById("commentDate").value;
-
   let today = new Date();
   let day = today.getDate();
   let dayAgo = day - 1;
@@ -53,56 +112,33 @@ function AddComment() {
     commentDate = 'вчера';
   }
 
-  div = document.createElement('div');
-  currentId = currentId + 1;
-  let currenComment = "comment" + currentId;
-  div.id = currenComment;
-  div.className = "comment";
-  document.getElementById("comments").append(div);
+  let bodyForFetch = {
+    id: elemCount + 1,
+    name: userName,
+    comment: userComment,
+    date: commentDate,
+    time: commentTime
+  }
 
-  div = document.createElement("div");
-  div.id = "userNameInComments";
-  text = document.createTextNode(userName);
-  div.append(text);
-  document.getElementById(currenComment).append(div);
+  postComments(bodyForFetch)
+  .then(responce=>console.log(responce.status));
+}
 
-  div = document.createElement("div");
-  div.id = "userCommentInComments";
-  text = document.createTextNode(userComment);
-  div.append(text);
-  document.getElementById(currenComment).append(div);
+async function deleteComment(e) {
+  let id = document.getElementById(e.target.id).parentElement.id.slice(13);
+  await fetch(`http://localhost:5000/comments/${id}`, {
+    method: 'DELETE',
+  })
+  .then(res=> console.log(res.status));
+}
 
-  div = document.createElement("div");
-  let commentBottom = 'commentBottom' + currentId;
-  // console.log(commentBottom);
-  div.id = commentBottom;
-  div.className = 'commentBottom';
-  document.getElementById(currenComment).append(div);
-
-  let commentDateTime = `${commentDate}, ${commentTime}`;
-  div = document.createElement("div");
-  div.id = "commentDateTimeinComments";
-  text = document.createTextNode(commentDateTime);
-  div.append(text);
-  document.getElementById(commentBottom).append(div);
-
-  let img = document.createElement("img");
-  img.id = "likeButton" + currentId;
-  img.className = "likeButton";
-  img.src = "../img/like.png";
-  img.addEventListener('click', likeComment);
-  document.getElementById(commentBottom).append(img);
-
-  img = document.createElement("img");
-  img.id = "commentButton" + currentId;
-  img.className = "commentButton";
-  img.src = "../img/delete1.png";
-  img.addEventListener('click', deleteComment);
-  document.getElementById(commentBottom).append(img);
-  
-
-  document.getElementById("userName").value = "";
-  document.getElementById("userComment").value = "";
-  document.getElementById("commentDate").value = "";
+function likeComment(e) {
+  console.log(e.target.id);
+  console.log(document.getElementById(e.target.id).src.slice(-8));
+  if (document.getElementById(e.target.id).src.slice(-8) === "like.png") {
+    document.getElementById(e.target.id).src = "../img/likeRed.png";
+  } else {
+    document.getElementById(e.target.id).src = "../img/like.png";
+  }
 }
 
