@@ -125,7 +125,7 @@ function AddComment() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      id: elemCount +1,
+      id: elemCount + 1,
       name: userName,
       comment: userComment,
       date: commentDate,
