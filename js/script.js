@@ -1,12 +1,11 @@
-let usersinfo = [];
-
+/* fetch GET из db.json */
 async function getComments() {
   const responce = await fetch('http://localhost:5000/comments');
   const comments = await responce.json();
-  console.log(comments);
   return comments;
 }
 
+/* fetch POST из db.json */
 async function postComments (bodyForFetch) {
   let responce = await fetch('http://localhost:5000/comments', {
     method: 'POST',
@@ -18,7 +17,7 @@ async function postComments (bodyForFetch) {
   return responce;
 }
 
-
+/* Отражает комментарии из db.json */
 getComments()
 .then(comments => {
   console.log(comments)
@@ -60,19 +59,27 @@ getComments()
     let img = document.createElement("img");
     img.id = "likeButton" + item.id;
     img.className = "likeButton";
-    img.src = "../img/like.png";
+    if (item.like === true) {
+      img.src = "../img/likeRed.png";
+      img.title='unlike!';
+    } else {
+      img.src = "../img/like.png";
+      img.title='like!';
+    }
     img.addEventListener('click', likeComment);
     document.getElementById(commentBottom).append(img);
 
     img = document.createElement("img");
-    img.id = "commentButton" + item.id;
-    img.className = "commentButton";
+    img.id = "deleteButton" + item.id;
+    img.className = "deleteButton";
     img.src = "../img/delete1.png";
+    img.title='delete!';
     img.addEventListener('click', deleteComment);
     document.getElementById(commentBottom).append(img);
   });
 });
 
+/* Добавляет новый комментарий */
 async function AddComment() {
   let elemCount  = document.getElementsByClassName("comments").childElementCount;
   let userName = document.getElementById("userName").value;
@@ -124,6 +131,7 @@ async function AddComment() {
   .then(responce=>console.log(responce.status));
 }
 
+/* Удаляет комментарий */
 async function deleteComment(e) {
   let id = document.getElementById(e.target.id).parentElement.id.slice(13);
   await fetch(`http://localhost:5000/comments/${id}`, {
@@ -132,13 +140,30 @@ async function deleteComment(e) {
   .then(res=> console.log(res.status));
 }
 
-function likeComment(e) {
-  console.log(e.target.id);
-  console.log(document.getElementById(e.target.id).src.slice(-8));
+/* делает like и unlike комментария */
+async function likeComment(e) {
+  let id = e.target.id.slice(10);
   if (document.getElementById(e.target.id).src.slice(-8) === "like.png") {
-    document.getElementById(e.target.id).src = "../img/likeRed.png";
+    await fetch(`http://localhost:5000/comments/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      like: true
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    } 
+  })
+  .then (responce=>responce.json())
   } else {
-    document.getElementById(e.target.id).src = "../img/like.png";
+    await fetch(`http://localhost:5000/comments/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      like: false
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    } 
+  })
+  .then (responce=>responce.json())
   }
 }
-
