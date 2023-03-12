@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <title>Comments Example</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <wrapper>
     <container>
-      <form id="myForm" onsubmit="AddComment()">
+      <form id="myForm" type="submit" onsubmit="AddComment(event)">
         <span>Имя:</span>
         <input type="text" id="userName" value = "" placeholder="Ваше имя" name="userName" required autocomplete="off">
         <span>Комментарий:</span>
@@ -23,13 +23,13 @@
             id="commentDate" autocomplete="off">
           </div>
           <div id="ButtonDiv">
-            <button type="submit">ОТПРАВИТЬ</button>
+            <button>ОТПРАВИТЬ</button>
           </div>
         </div>
       </form>
       <div id="comments" class="comments"></div>
     </container>
   </wrapper>
-  <script src="/js/script1.js" ></script>
+  <script src="./js/script.js" async ></script>
 </body>
 </html>
