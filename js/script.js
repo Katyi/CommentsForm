@@ -63,10 +63,10 @@ getComments()
     img.id = "likeButton" + item.id;
     img.className = "likeButton";
     if (item.like === true) {
-      img.src = "../img/likeRed.png";
+      img.src = "./img/likeRed.png";
       img.title='unlike!';
     } else {
-      img.src = "../img/like.png";
+      img.src = "./img/like.png";
       img.title='like!';
     }
     img.addEventListener('click', likeComment);
@@ -75,7 +75,7 @@ getComments()
     img = document.createElement("img");
     img.id = "deleteButton" + item.id;
     img.className = "deleteButton";
-    img.src = "../img/delete1.png";
+    img.src = "./img/delete1.png";
     img.title='delete!';
     img.addEventListener('click', deleteComment);
     document.getElementById(commentBottom).append(img);
